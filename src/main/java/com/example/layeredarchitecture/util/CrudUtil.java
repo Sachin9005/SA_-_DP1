@@ -1,4 +1,4 @@
-package com.example.layeredarchitecture.CrudUtil;
+package com.example.layeredarchitecture.util;
 
 import com.example.layeredarchitecture.db.DBConnection;
 
@@ -13,13 +13,14 @@ public class CrudUtil {
         PreparedStatement stm = conn.prepareStatement(sql);
         for(int i = 0; i < args.length; i++){
             stm.setObject(i+1, args[i]);
-        }
+                    }
         if (sql.startsWith("SELECT") || sql.startsWith("select")){
             ResultSet rst = stm.executeQuery();
             return (T) rst;
         }else {
-            boolean result = stm.executeUpdate(sql)>0;
-            return (T) (Boolean) result;
+            int result = stm.executeUpdate(sql);
+            boolean rest = result > 0 ;
+            return (T) (Boolean) rest;
         }
     }
 }

@@ -2,15 +2,16 @@ package com.example.layeredarchitecture.dao;
 
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
+import com.example.layeredarchitecture.util.CrudUtil;
+
 import java.sql.*;
 import java.util.ArrayList;
 
 public class CustomerDAOImpl implements CustomerDAO {
 
     public ArrayList<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        Statement stm = connection.createStatement();
-        ResultSet rst = stm.executeQuery("SELECT * FROM Customer");
+
+        ResultSet rst= CrudUtil.execute("SELECT * FROM Customer");
         ArrayList<CustomerDTO> customers = new ArrayList<>();
         while (rst.next()) {
           String id = rst.getString("id");
@@ -22,12 +23,15 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     public boolean saveCustomer(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement pstm = connection.prepareStatement("INSERT INTO Customer (id,name, address) VALUES (?,?,?)");
-        pstm.setString(1, customerDTO.getId());
-        pstm.setString(2, customerDTO.getName());
-        pstm.setString(3, customerDTO.getAddress());
-        return pstm.executeUpdate() > 0 ;
+//        Connection connection = DBConnection.getDbConnection().getConnection();
+//        PreparedStatement pstm = connection.prepareStatement("INSERT INTO Customer (id,name, address) VALUES (?,?,?)");//id = 1,name = sas , adreess = galle
+//        pstm.setString(1, customerDTO.getId());
+//        pstm.setString(2, customerDTO.getName());
+//        pstm.setString(3, customerDTO.getAddress());
+//        return pstm.executeUpdate() > 0 ;
+
+        boolean result = CrudUtil.execute("INSERT INTO Customer (id,name, address) VALUES (?,?,?)",customerDTO.getId(),customerDTO.getName(),customerDTO.getAddress());
+        return result;
     }
 
     public boolean updateCustomer(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
