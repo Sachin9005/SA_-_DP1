@@ -52,7 +52,7 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public ItemDTO serchItem(String code) throws SQLException, ClassNotFoundException {
         ItemDTO itemDTO = null;
-        ResultSet rst = CrudUtil.execute("SELECT * FROM Item WHERE code=?");
+        ResultSet rst = CrudUtil.execute("SELECT * FROM Item WHERE code=?",code);
         if (rst.next()) {
             String description = rst.getString("description");
             int qtyOnHand = rst.getInt("qtyOnHand");
@@ -65,7 +65,7 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public ItemDTO getItem(String code) throws SQLException, ClassNotFoundException {
         ItemDTO itemDTO = null;
-        ResultSet rst = CrudUtil.execute("SELECT * FROM Item WHERE code=?");
+        ResultSet rst = CrudUtil.execute("SELECT * FROM Item WHERE code=?",code);
         if (rst.next()) {
             String description = rst.getString("description");
             int qtyOnHand = rst.getInt("qtyOnHand");

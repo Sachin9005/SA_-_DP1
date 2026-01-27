@@ -13,11 +13,11 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     public boolean existOrderID(String orderID) throws SQLException, ClassNotFoundException {
-        ResultSet rst = CrudUtil.execute("SELECT oid FROM `Orders` WHERE oid=?");
+        ResultSet rst = CrudUtil.execute("SELECT oid FROM `Orders` WHERE oid=?", orderID);
         return rst.next();
     }
 
     public boolean saveOrder(String orderId,String customerId , LocalDate date) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)");
+        return CrudUtil.execute("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)", orderId, date, customerId);
     }
 }
