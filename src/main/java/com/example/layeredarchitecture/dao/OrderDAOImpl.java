@@ -9,7 +9,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
 
-public class OrderDAOImpl {
+public class OrderDAOImpl implements OrderDAO {
 
     public String generateOderId() throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
