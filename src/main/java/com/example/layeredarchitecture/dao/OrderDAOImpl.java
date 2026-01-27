@@ -11,8 +11,6 @@ import java.util.List;
 
 public class OrderDAOImpl {
 
-    private final ItemDAOImpl itemDAO =  new ItemDAOImpl();
-
     public String generateOderId() throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
         Statement stm = connection.createStatement();
