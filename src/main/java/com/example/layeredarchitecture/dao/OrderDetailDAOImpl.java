@@ -5,7 +5,7 @@ import com.example.layeredarchitecture.model.OrderDetailDTO;
 
 import java.sql.*;
 
-public class OrderDetailDAOImpl {
+public class OrderDetailDAOImpl implements  OrderDetailDAO {
 
      public boolean saveOrderDetails(String orderId,OrderDetailDTO orderDetail) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();

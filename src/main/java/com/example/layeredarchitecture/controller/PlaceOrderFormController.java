@@ -1,9 +1,6 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.dao.CustomerDAOImpl;
-import com.example.layeredarchitecture.dao.ItemDAOImpl;
-import com.example.layeredarchitecture.dao.OrderDAOImpl;
-import com.example.layeredarchitecture.dao.OrderDetailDAOImpl;
+import com.example.layeredarchitecture.dao.*;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
@@ -54,9 +51,10 @@ public class PlaceOrderFormController {
     public Label lblTotal;
     private String orderId;
 
-    private final OrderDAOImpl orderDAO = new OrderDAOImpl();
+    private final OrderDAO orderDAO = new OrderDAOImpl();
     private final CustomerDAOImpl customerDAO = new CustomerDAOImpl();
     private final ItemDAOImpl itemDAO = new ItemDAOImpl();
+    private final OrderDetailDAO orderDetailDAO = new OrderDetailDAOImpl();
 
 
     public void initialize() throws SQLException, ClassNotFoundException {
@@ -253,8 +251,8 @@ public class PlaceOrderFormController {
             }
 
             for (OrderDetailDTO detail : orderDetails) {
-                OrderDetailDAOImpl orderItemDAOImpl = new OrderDetailDAOImpl();
-                boolean isOrderDetailSaved= orderItemDAOImpl.saveOrderDetails(orderId,detail);
+
+                boolean isOrderDetailSaved= orderDetailDAO.saveOrderDetails(orderId,detail);
 
                 if (!isOrderDetailSaved) {
                     connection.rollback();
