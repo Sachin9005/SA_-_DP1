@@ -23,8 +23,8 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public void saveItem(ItemDTO item) throws SQLException, ClassNotFoundException {
-        CrudUtil.execute("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)",item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand());
+    public boolean saveItem(ItemDTO item) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)",item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand());
     }
 
     @Override
@@ -33,8 +33,8 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public void deleteItem(String code) throws SQLException, ClassNotFoundException {
-        CrudUtil.execute("DELETE FROM Item WHERE code=?",code);
+    public boolean deleteItem(String code) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("DELETE FROM Item WHERE code=?",code);
     }
 
     @Override

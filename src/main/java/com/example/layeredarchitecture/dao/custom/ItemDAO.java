@@ -9,11 +9,11 @@ import java.util.ArrayList;
 public interface ItemDAO {
     ArrayList<ItemDTO> getAllItems() throws SQLException, ClassNotFoundException;
 
-    void saveItem(ItemDTO item) throws SQLException, ClassNotFoundException;
+    boolean saveItem(ItemDTO item) throws SQLException, ClassNotFoundException;
 
     boolean updateItem(ItemDTO item) throws SQLException, ClassNotFoundException;
 
-    void deleteItem(String code) throws SQLException, ClassNotFoundException;
+    boolean deleteItem(String code) throws SQLException, ClassNotFoundException;
 
     boolean existsItem(String code) throws SQLException, ClassNotFoundException;
 
