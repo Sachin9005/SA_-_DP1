@@ -1,8 +1,11 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.dao.*;
 import com.example.layeredarchitecture.dao.custom.OrderDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDetailDAO;
+import com.example.layeredarchitecture.dao.impl.CustomerDAOImpl;
+import com.example.layeredarchitecture.dao.impl.ItemDAOImpl;
+import com.example.layeredarchitecture.dao.impl.OrderDAOImpl;
+import com.example.layeredarchitecture.dao.impl.OrderDetailDAOImpl;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
@@ -109,7 +112,7 @@ public class PlaceOrderFormController {
 //                            "There is no such customer associated with the id " + id
                             new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
                         }
-                        CustomerDTO customerDTO = customerDAO.searchCustomer(newValue);
+                        CustomerDTO customerDTO = customerDAO.search(newValue);
 
                         txtCustomerName.setText(customerDTO.getName());
                     } catch (SQLException e) {
@@ -135,7 +138,7 @@ public class PlaceOrderFormController {
                     if (!existItem(newItemCode + "")) {
 //                        throw new NotFoundException("There is no such item associated with the id " + code);
                     }
-                    ItemDTO item = itemDAO.serchItem(newItemCode);
+                    ItemDTO item = itemDAO.search(newItemCode);
                     txtDescription.setText(item.getDescription());
                     txtUnitPrice.setText(item.getUnitPrice().setScale(2).toString());
 
@@ -179,11 +182,11 @@ public class PlaceOrderFormController {
     }
 
     private boolean existItem(String code) throws SQLException, ClassNotFoundException {
-        return itemDAO.existsItem(code);
+        return itemDAO.exist(code);
     }
 
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
-        return customerDAO.existCustomer(id);
+        return customerDAO.exist(id);
     }
 
     public String generateNewOrderId() {
@@ -199,7 +202,7 @@ public class PlaceOrderFormController {
 
     private void loadAllCustomerIds() {
         try {
-            ArrayList<CustomerDTO> customerDTOs = customerDAO.getAllCustomers();
+            ArrayList<CustomerDTO> customerDTOs = customerDAO.getAll();
             for (CustomerDTO customerDTO : customerDTOs) {
                 cmbCustomerId.getItems().add(customerDTO.getId());
             }
@@ -213,7 +216,7 @@ public class PlaceOrderFormController {
     private void loadAllItemCodes() {
         try {
             /*Get all items*/
-            ArrayList<ItemDTO> itemDTOs = itemDAO.getAllItems();
+            ArrayList<ItemDTO> itemDTOs = itemDAO.getAll();
             for (ItemDTO itemDTO : itemDTOs) {
                 cmbItemCode.getItems().add(itemDTO.getCode());
             }
@@ -241,12 +244,12 @@ public class PlaceOrderFormController {
         try {
             connection = DBConnection.getDbConnection().getConnection();
             /*if order id already exist*/
-            if (orderDAO.existOrderID(orderId)) {
+            if (orderDAO.exist(orderId)) {
                 return false;
             }
             connection.setAutoCommit(false);
 
-            boolean isOrderSave = orderDAO.saveOrder(new OrderDTO(orderId,customerId,orderDate));
+            boolean isOrderSave = orderDAO.save(new OrderDTO(orderId,customerId,orderDate));
             if (!isOrderSave) {
                 connection.rollback();
                 connection.setAutoCommit(true);
@@ -266,7 +269,7 @@ public class PlaceOrderFormController {
               //Search & Update Item
                 ItemDTO item = findItem(detail.getItemCode());
                 item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
-                boolean isQtyUpdate = itemDAO.updateItem(item);
+                boolean isQtyUpdate = itemDAO.update(item);
                 if (!isQtyUpdate) {
                     connection.rollback();
                     connection.setAutoCommit(true);
