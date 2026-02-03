@@ -1,21 +1,9 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.bo.custom.CustomerBO;
-import com.example.layeredarchitecture.bo.custom.ItemBO;
 import com.example.layeredarchitecture.bo.custom.PlaceOrderBO;
-import com.example.layeredarchitecture.bo.custom.impl.CustomerBOimpl;
-import com.example.layeredarchitecture.bo.custom.impl.ItemBOimpl;
 import com.example.layeredarchitecture.bo.custom.impl.PlaceOrderBOimpl;
-import com.example.layeredarchitecture.dao.custom.OrderDAO;
-import com.example.layeredarchitecture.dao.custom.OrderDetailDAO;
-import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.OrderDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.OrderDetailDAOImpl;
-import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.model.OrderDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 import com.example.layeredarchitecture.view.tdm.OrderDetailTM;
 import com.jfoenix.controls.JFXButton;
@@ -64,7 +52,6 @@ public class PlaceOrderFormController {
     private String orderId;
 
     PlaceOrderBO placeOrderBO = new PlaceOrderBOimpl();
-
 
     public void initialize() throws SQLException, ClassNotFoundException {
 
@@ -242,67 +229,7 @@ public class PlaceOrderFormController {
     }
 
     public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) {
-        /*Transaction*/
-        Connection connection = null;
-        try {
-            connection = DBConnection.getDbConnection().getConnection();
-            /*if order id already exist*/
-            if (placeOrderBO.existOrder(orderId)) {
-                return false;
-            }
-            connection.setAutoCommit(false);
-
-            boolean isOrderSave = placeOrderBO.saveOrder(new OrderDTO(orderId,customerId,orderDate));
-            if (!isOrderSave) {
-                connection.rollback();
-                connection.setAutoCommit(true);
-                return false;
-            }
-
-            for (OrderDetailDTO detail : orderDetails) {
-
-                boolean isOrderDetailSaved= placeOrderBO.saveOrderDetails(orderId,detail);
-
-                if (!isOrderDetailSaved) {
-                    connection.rollback();
-                    connection.setAutoCommit(true);
-                    return false;
-                }
-
-              //Search & Update Item
-                ItemDTO item = findItem(detail.getItemCode());
-                item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
-                boolean isQtyUpdate = placeOrderBO.updateItem(item);
-                if (!isQtyUpdate) {
-                    connection.rollback();
-                    connection.setAutoCommit(true);
-                    return false;
-                }
-            }
-
-            connection.commit();
-            connection.setAutoCommit(true);
-            return true;
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public ItemDTO findItem(String code) {
-        ItemDAOImpl itemDAOImpl = new ItemDAOImpl();
-        try {
-            ItemDTO itemDTO = itemDAOImpl.getItem(code);
-            return itemDTO;
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to find the Item " + code, e);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return placeOrderBO.saveOrder(orderId, orderDate, customerId, orderDetails);
     }
 
     public void btnAdd_OnAction(ActionEvent actionEvent) {

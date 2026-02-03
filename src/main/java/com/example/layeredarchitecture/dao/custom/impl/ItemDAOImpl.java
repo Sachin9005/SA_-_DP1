@@ -68,16 +68,4 @@ public class ItemDAOImpl implements ItemDAO {
         }
         return itemDTO;
     }
-
-    public ItemDTO getItem(String code) throws SQLException, ClassNotFoundException {
-        ItemDTO itemDTO = null;
-        ResultSet rst = CrudUtil.execute("SELECT * FROM Item WHERE code=?",code);
-        if (rst.next()) {
-            String description = rst.getString("description");
-            int qtyOnHand = rst.getInt("qtyOnHand");
-            BigDecimal unitPrice = rst.getBigDecimal("unitPrice");
-            itemDTO=new ItemDTO(code, description, unitPrice, qtyOnHand);
-        }
-        return itemDTO;
-    }
 }
