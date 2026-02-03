@@ -1,6 +1,7 @@
 package com.example.layeredarchitecture.dao;
 
 import com.example.layeredarchitecture.dao.custom.OrderDAO;
+import com.example.layeredarchitecture.model.OrderDTO;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -20,7 +21,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public boolean saveOrder(String orderId,String customerId , LocalDate date) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)", orderId, date, customerId);
+    public boolean saveOrder(OrderDTO orderDTO) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)",orderDTO.getOrderId(),orderDTO.getCustomerId(),orderDTO.getOrderDate());
     }
 }
