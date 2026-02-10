@@ -2,10 +2,9 @@ package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.bo.BOFactory;
 import com.example.layeredarchitecture.bo.custom.PlaceOrderBO;
-import com.example.layeredarchitecture.bo.custom.impl.PlaceOrderBOimpl;
-import com.example.layeredarchitecture.model.CustomerDTO;
-import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.model.OrderDetailDTO;
+import com.example.layeredarchitecture.dto.CustomerDTO;
+import com.example.layeredarchitecture.dto.ItemDTO;
+import com.example.layeredarchitecture.dto.OrderDetailDTO;
 import com.example.layeredarchitecture.view.tdm.OrderDetailTM;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -77,7 +76,7 @@ public class PlaceOrderFormController {
         });
 
         orderId = generateNewOrderId();
-        lblId.setText("Order ID: " + orderId);
+        lblId.setText("Orders ID: " + orderId);
         lblDate.setText(LocalDate.now().toString());
         btnPlaceOrder.setDisable(true);
         txtCustomerName.setFocusTraversable(false);
@@ -100,14 +99,14 @@ public class PlaceOrderFormController {
                     /*Search Customer*/
                     try {
                         if (!existCustomer(newValue + "")) {
-//                            "There is no such customer associated with the id " + id
-                            new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
+//                            "There is no such Customer associated with the id " + id
+                            new Alert(Alert.AlertType.ERROR, "There is no such Customer associated with the id " + newValue + "").show();
                         }
                         CustomerDTO customerDTO = placeOrderBO.search(newValue);
 
                         txtCustomerName.setText(customerDTO.getName());
                     } catch (SQLException e) {
-                        new Alert(Alert.AlertType.ERROR, "Failed to find the customer " + newValue + "" + e).show();
+                        new Alert(Alert.AlertType.ERROR, "Failed to find the Customer " + newValue + "" + e).show();
                     }
 
                 } catch (ClassNotFoundException e) {
@@ -198,7 +197,7 @@ public class PlaceOrderFormController {
                 cmbCustomerId.getItems().add(customerDTO.getId());
             }
         } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, "Failed to load customer ids").show();
+            new Alert(Alert.AlertType.ERROR, "Failed to load Customer ids").show();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -291,13 +290,13 @@ public class PlaceOrderFormController {
         boolean b = saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
 
         if (b) {
-            new Alert(Alert.AlertType.INFORMATION, "Order has been placed successfully").show();
+            new Alert(Alert.AlertType.INFORMATION, "Orders has been placed successfully").show();
         } else {
-            new Alert(Alert.AlertType.ERROR, "Order has not been placed successfully").show();
+            new Alert(Alert.AlertType.ERROR, "Orders has not been placed successfully").show();
         }
 
         orderId = generateNewOrderId();
-        lblId.setText("Order Id: " + orderId);
+        lblId.setText("Orders Id: " + orderId);
         cmbCustomerId.getSelectionModel().clearSelection();
         cmbItemCode.getSelectionModel().clearSelection();
         tblOrderDetails.getItems().clear();

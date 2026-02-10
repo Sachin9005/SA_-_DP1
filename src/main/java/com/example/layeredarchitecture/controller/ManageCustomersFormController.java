@@ -2,8 +2,7 @@ package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.bo.BOFactory;
 import com.example.layeredarchitecture.bo.custom.CustomerBO;
-import com.example.layeredarchitecture.bo.custom.impl.CustomerBOimpl;
-import com.example.layeredarchitecture.model.CustomerDTO;
+import com.example.layeredarchitecture.dto.CustomerDTO;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -147,19 +146,19 @@ public class ManageCustomersFormController {
                 customerBO.saveCustomer(new CustomerDTO(id, name, address));
                 tblCustomers.getItems().add(new CustomerTM(id, name, address));
             } catch (SQLException e) {
-                new Alert(Alert.AlertType.ERROR, "Failed to save the customer " + e.getMessage()).show();
+                new Alert(Alert.AlertType.ERROR, "Failed to save the Customer " + e.getMessage()).show();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
-            /*Update customer*/
+            /*Update Customer*/
             try {
                 if (!existCustomer(id)) {
-                    new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
+                    new Alert(Alert.AlertType.ERROR, "There is no such Customer associated with the id " + id).show();
                 }
                 customerBO.updateCustomer(new CustomerDTO(id, name, address));
             } catch (SQLException e) {
-                new Alert(Alert.AlertType.ERROR, "Failed to update the customer " + id + e.getMessage()).show();
+                new Alert(Alert.AlertType.ERROR, "Failed to update the Customer " + id + e.getMessage()).show();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -182,7 +181,7 @@ public class ManageCustomersFormController {
         String id = tblCustomers.getSelectionModel().getSelectedItem().getId();
         try {
             if (!existCustomer(id)) {
-                new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
+                new Alert(Alert.AlertType.ERROR, "There is no such Customer associated with the id " + id).show();
             }
             customerBO.deleteCustomer(id);
             tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
@@ -190,7 +189,7 @@ public class ManageCustomersFormController {
             initUI();
 
         } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, "Failed to delete the customer " + id).show();
+            new Alert(Alert.AlertType.ERROR, "Failed to delete the Customer " + id).show();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

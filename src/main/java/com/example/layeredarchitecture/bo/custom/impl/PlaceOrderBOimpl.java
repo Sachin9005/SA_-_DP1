@@ -7,15 +7,15 @@ import com.example.layeredarchitecture.dao.custom.CustomerDAO;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDetailDAO;
-import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.OrderDAOImpl;
-import com.example.layeredarchitecture.dao.custom.impl.OrderDetailDAOImpl;
 import com.example.layeredarchitecture.db.DBConnection;
-import com.example.layeredarchitecture.model.CustomerDTO;
-import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.model.OrderDTO;
-import com.example.layeredarchitecture.model.OrderDetailDTO;
+import com.example.layeredarchitecture.dto.CustomerDTO;
+import com.example.layeredarchitecture.dto.ItemDTO;
+import com.example.layeredarchitecture.dto.OrderDTO;
+import com.example.layeredarchitecture.dto.OrderDetailDTO;
+import com.example.layeredarchitecture.entity.Customer;
+import com.example.layeredarchitecture.entity.Item;
+import com.example.layeredarchitecture.entity.OrderDetails;
+import com.example.layeredarchitecture.entity.Orders;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -41,27 +41,38 @@ public class PlaceOrderBOimpl implements PlaceOrderBO {
 
     @Override
     public boolean saveOrder(OrderDTO orderDTO) throws SQLException, ClassNotFoundException {
-        return orderDAO.save(orderDTO);
+        Orders order = new Orders(orderDTO.getOrderId(),orderDTO.getOrderDate(),orderDTO.getCustomerId());
+        return orderDAO.save(order);
     }
 
     @Override
     public boolean saveOrderDetails(String orderId, OrderDetailDTO orderDetail) throws SQLException, ClassNotFoundException {
-        return orderDetailDAO.saveOrderDetails(orderId, orderDetail);
+        OrderDetails orderDetails = new OrderDetails(orderId,orderDetail.getItemCode(),orderDetail.getUnitPrice(),orderDetail.getQty());
+        return orderDetailDAO.saveOrderDetails(orderDetails);
     }
 
     @Override
     public ItemDTO searchItem(String code) throws SQLException, ClassNotFoundException {
-        return itemDAO.search(code);
+        Item item =  itemDAO.search(code);
+        ItemDTO itemDTO = new ItemDTO(item.getCode(),item.getDescription(),item.getUnitPrice(),item.getQtyOnHand());
+        return itemDTO;
     }
 
    @Override
     public ArrayList<ItemDTO> getAllItems() throws SQLException, ClassNotFoundException {
-        return itemDAO.getAll();
+        ArrayList<Item> item =  itemDAO.getAll();
+        ArrayList<ItemDTO> itemDTOS = new ArrayList<>();
+        for (Item item1 : item) {
+            itemDTOS.add(new ItemDTO(item1.getCode(),item1.getDescription(),item1.getUnitPrice(),item1.getQtyOnHand()));
+        }
+        return itemDTOS;
     }
 
     @Override
     public CustomerDTO search(String newValue) throws SQLException, ClassNotFoundException {
-        return customerDAO.search(newValue);
+        Customer customer =  customerDAO.search(newValue);
+        CustomerDTO customerDTO = new CustomerDTO(customer.getId(),customer.getName(),customer.getAddress());
+        return customerDTO;
     }
 
     @Override
@@ -76,12 +87,18 @@ public class PlaceOrderBOimpl implements PlaceOrderBO {
 
     @Override
     public ArrayList<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException {
-        return customerDAO.getAll();
+        ArrayList<Customer> customers =  customerDAO.getAll();
+        ArrayList<CustomerDTO> customerDTOS = new ArrayList<>();
+        for (Customer customer : customers) {
+            customerDTOS.add(new CustomerDTO(customer.getId(),customer.getName(),customer.getAddress()));
+        }
+        return customerDTOS;
     }
 
     @Override
     public boolean updateItem(ItemDTO item) throws SQLException, ClassNotFoundException {
-        return itemDAO.update(item);
+        Item item1 = new Item(item.getCode(),item.getDescription(),item.getUnitPrice(),item.getQtyOnHand());
+        return itemDAO.update(item1);
     }
 
     @Override

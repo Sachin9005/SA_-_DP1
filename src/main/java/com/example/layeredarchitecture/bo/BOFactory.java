@@ -1,5 +1,6 @@
 package com.example.layeredarchitecture.bo;
 
+import com.example.layeredarchitecture.bo.custom.CustomerBO;
 import com.example.layeredarchitecture.bo.custom.SuperBO;
 import com.example.layeredarchitecture.bo.custom.impl.CustomerBOimpl;
 import com.example.layeredarchitecture.bo.custom.impl.ItemBOimpl;

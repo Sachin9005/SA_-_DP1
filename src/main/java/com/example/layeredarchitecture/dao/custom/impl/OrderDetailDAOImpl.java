@@ -2,29 +2,31 @@ package com.example.layeredarchitecture.dao.custom.impl;
 
 import com.example.layeredarchitecture.dao.CrudUtil;
 import com.example.layeredarchitecture.dao.custom.OrderDetailDAO;
-import com.example.layeredarchitecture.model.OrderDetailDTO;
+import com.example.layeredarchitecture.dto.OrderDetailDTO;
+import com.example.layeredarchitecture.entity.OrderDetails;
+
 import java.sql.*;
 import java.util.ArrayList;
 
 public class OrderDetailDAOImpl implements OrderDetailDAO {
 
     @Override
-     public boolean saveOrderDetails(String orderId,OrderDetailDTO orderDetail) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)", orderId, orderDetail.getItemCode(), orderDetail.getUnitPrice(), orderDetail.getQty());
+     public boolean saveOrderDetails(OrderDetails orderDetail) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)", orderDetail.getOid(), orderDetail.getItemCode(), orderDetail.getUnitPrice(), orderDetail.getQty());
     }
 
     @Override
-    public ArrayList<OrderDetailDTO> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<OrderDetails> getAll() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(OrderDetailDTO customerDTO) throws SQLException, ClassNotFoundException {
+    public boolean save(OrderDetails customerDTO) throws SQLException, ClassNotFoundException {
         return false;
     }
 
     @Override
-    public boolean update(OrderDetailDTO customerDTO) throws SQLException, ClassNotFoundException {
+    public boolean update(OrderDetails customerDTO) throws SQLException, ClassNotFoundException {
         return false;
     }
 
@@ -44,7 +46,7 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
     }
 
     @Override
-    public OrderDetailDTO search(String newValue) throws SQLException, ClassNotFoundException {
+    public OrderDetails search(String newValue) throws SQLException, ClassNotFoundException {
         return null;
     }
 }
