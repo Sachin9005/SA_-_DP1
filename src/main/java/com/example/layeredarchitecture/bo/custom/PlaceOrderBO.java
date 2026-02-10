@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface PlaceOrderBO {
+public interface PlaceOrderBO extends SuperBO {
     String generateNewOrderId() throws SQLException, ClassNotFoundException;
     boolean existOrder(String orderID) throws SQLException, ClassNotFoundException;
     boolean saveOrder(OrderDTO orderDTO) throws SQLException, ClassNotFoundException;
