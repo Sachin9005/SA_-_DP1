@@ -10,6 +10,10 @@ public class DAOFactory{
         return daoFactory==null?new DAOFactory():daoFactory;
     }
 
+    public enum DAOType {
+        CUSTOMER,ITEM,ORDER,ORDERDETAILS,QUERY;
+    }
+
     public SuperDAO getDAO(DAOType daoType) {
         switch (daoType){
             case CUSTOMER:

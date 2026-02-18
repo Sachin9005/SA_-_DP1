@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class OrderDetailDAOImpl implements OrderDetailDAO {
 
+    //use this method as save this is wrong
     @Override
      public boolean saveOrderDetails(OrderDetails orderDetail) throws SQLException, ClassNotFoundException {
         return CrudUtil.execute("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)", orderDetail.getOid(), orderDetail.getItemCode(), orderDetail.getUnitPrice(), orderDetail.getQty());
